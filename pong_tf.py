@@ -21,12 +21,12 @@ import gym
 INPUT_DIM = 80 * 80
 GAMMA = 0.99
 DECAY_RATE = 0.99
-NEURAL_NODES = 400      # for flat
+NEURAL_NODES = 200      # for flat
 UPDATE_FREQUENCY = 10
 LEARNING_RATE = 1e-3
 REWARD_SUM = 0
-RESUME = False
-RENDER = False
+RESUME = True
+RENDER = True
 
 # Initialize
 env = gym.make("Pong-v0")
@@ -80,17 +80,17 @@ def learning_model(INPUT_DIM=80 * 80, model_type='flat'):
 
   model.compile(loss='categorical_crossentropy', optimizer=opt)
 
-  if resume == True:
-    model.load_weights('model_chckpnt_%s.h5' % model_type)
+  if RESUME == True:
+    model.load_weights('pong_model_checkpoint_%s.h5' % model_type)
 
   return model
 
 if __name__ == '__main__':
-  model_type = 'CNN'
+  model_type = 'flat'
   model = learning_model(model_type=model_type)
 
   while 'Ping' != 'Pong':
-    if render:
+    if RENDER:
       env.render()
 
     cur_x = pong_preprocess_screen(observation)
@@ -145,7 +145,7 @@ if __name__ == '__main__':
         train_y = []
         probs = []
 
-        model.save_weights('model_chckpnt_%s.h5' % model_type, overwrite=True)
+        model.save_weights('pong_model_checkpoint_%s.h5' % model_type, overwrite=True)
 
       running_reward = REWARD_SUM \
           if running_reward is None \
